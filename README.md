@@ -60,7 +60,9 @@ pip install -r requirements.txt
 jupyter lab
 ```
 
-Copiar `enfermedad_cardiovascular.csv` en la carpeta `data/` antes de ejecutar los notebooks.
+El dataset `enfermedad_cardiovascular.csv` se incluye en la carpeta `data/`.
+
+En macOS, XGBoost necesita la librería OpenMP: `brew install libomp`.
 
 Todos los procesos aleatorios usan la semilla definida en `src/config.py` (`SEED = 42`).
 

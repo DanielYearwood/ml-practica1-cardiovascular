@@ -15,3 +15,6 @@ __pycache__/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Material oficial de la asignatura (no se sube)
+material_asignatura/

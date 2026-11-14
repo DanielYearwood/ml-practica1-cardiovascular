@@ -38,7 +38,8 @@ ml-practica1-cardiovascular/
 ├── notebooks/
 │   ├── 01_analisis_exploratorio.ipynb
 │   ├── 02_preprocesamiento.ipynb
-│   └── 03_validacion.ipynb
+│   ├── 03_validacion.ipynb
+│   └── 04_modelos_base.ipynb
 ├── results/              # Figuras y tablas generadas
 ├── src/
 │   ├── config.py         # Rutas, semilla y parámetros comunes

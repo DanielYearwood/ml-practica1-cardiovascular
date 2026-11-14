@@ -39,7 +39,8 @@ ml-practica1-cardiovascular/
 │   └── 01_analisis_exploratorio.ipynb
 ├── results/              # Figuras y tablas generadas
 ├── src/
-│   └── config.py         # Rutas, semilla y parámetros comunes
+│   ├── config.py         # Rutas, semilla y parámetros comunes
+│   └── reglas_clinicas.py # Rangos clínicos para detectar valores imposibles
 ├── requirements.txt
 └── README.md
 ```

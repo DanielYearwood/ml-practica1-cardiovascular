@@ -1,0 +1,16 @@
+,min_admisible,max_admisible,min_observado,max_observado,n_imposibles,porcentaje
+consumo_alcohol_semanal,0.0,,-5.0,15.3,177,7.85
+presion_sistolica,60.0,260.0,52.2,231.36,44,1.95
+presion_diastolica,30.0,150.0,30.8,122.5,44,1.95
+frecuencia_ejercicio_semanal,0.0,7.0,0.0,10.0,41,1.82
+colesterol_hdl,10.0,150.0,-8.8,106.3,20,0.89
+anos_fumador,0.0,,0.0,39.9,18,0.8
+indice_masa_corporal,12.0,70.0,3.6,50.6,13,0.58
+trigliceridos,20.0,2000.0,-35.7,452.7,10,0.44
+glucosa_ayunas,40.0,600.0,32.0,194.0,6,0.27
+perimetro_cintura,50.0,200.0,44.2,148.9,6,0.27
+hemoglobina_glicosilada,3.5,20.0,2.82,8.78,5,0.22
+edad,18.0,110.0,9.8,103.5,4,0.18
+frecuencia_cardiaca_reposo,30.0,220.0,25.8,112.7,2,0.09
+colesterol_total,70.0,600.0,61.1,448.59,1,0.04
+colesterol_ldl,10.0,400.0,6.1,266.7,1,0.04

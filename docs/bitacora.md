@@ -9,7 +9,7 @@ Registro de la evolución del planteamiento, las decisiones de diseño y los ava
 | 1 | Análisis exploratorio e identificación de problemáticas | Completada |
 | 2 | Preprocesamiento (mínimo 3 técnicas) | Completada |
 | 3 | Modelos base (mínimo 2) | Completada |
-| 4 | Modelos de ensemble (mínimo 3) | Pendiente |
+| 4 | Modelos de ensemble (mínimo 3) | Completada |
 | 5 | Validación, métricas y ajuste de hiperparámetros | En curso |
 | 6 | Conclusiones y tests estadísticos (opcional) | Pendiente |
 | 7 | Memoria, vídeo e informe de uso ético | Pendiente |
@@ -124,3 +124,28 @@ Decisiones:
 
 - Para comparar con los ensembles guardamos tres candidatos: la mejor logística, la mejor logística con `class_weight` y el mejor árbol. Están en `results/mejores_modelos_base.csv` y sus resultados de la validación cruzada 5x3 en `results/cv_repetida_modelos_base.csv`.
 - No evaluamos en test todavía. Se hará al final con todos los modelos a la vez.
+
+### Fase 5 · Modelos de ensemble (rama `feature/6-ensembles`)
+
+Hemos creado el notebook `05_ensembles.ipynb` con los tres ensembles, usando el mismo esquema de validación que los modelos base y las 12 configuraciones de preprocesamiento.
+
+Modelos:
+
+- Random Forest. `GridSearchCV` con `max_depth` (sin límite, 6 o 10), `min_samples_leaf` (1, 5 o 20) y `max_features` (`sqrt` o 0,3), con 300 árboles.
+- Gradient Boosting. `RandomizedSearchCV` con 25 combinaciones de `n_estimators`, `learning_rate`, `max_depth`, `subsample` y `min_samples_leaf`.
+- XGBoost. `RandomizedSearchCV` con 25 combinaciones, añadiendo `colsample_bytree`, `min_child_weight` y `reg_lambda`.
+
+Resultados en validación cruzada 5x3:
+
+- XGBoost es el mejor en F1 macro (0,645), casi empatado con la logística (0,641). Random Forest se queda en 0,630 y Gradient Boosting en 0,625.
+- Los tres mejoran mucho al árbol (0,528), pero no claramente a la logística. Las diferencias entre los cinco primeros son menores que la desviación entre particiones.
+- En recall de riesgo alto la mejor sigue siendo la logística con `class_weight` (0,75).
+- Los ensembles llegan a un F1 de 0,92 a 1 en train sin mejorar la validación. XGBoost, con árboles de profundidad 2, es el que menos sobreajusta.
+
+Decisiones:
+
+- Usamos `RandomizedSearchCV` en Gradient Boosting y XGBoost porque tienen muchos hiperparámetros y la rejilla completa tardaría demasiado.
+- En Gradient Boosting y XGBoost la configuración `class_weight` se hace con pesos por muestra, como en `src/validacion.py`.
+- Random Forest necesita `class_weight`: sin balancear tiene el peor recall de riesgo alto de todos los modelos (0,56). En XGBoost gana no balancear, pero con pesos sube el recall de riesgo alto.
+- Gradient Boosting deja de mejorar en validación hacia los 150 árboles. Es sensible a cambios pequeños, por eso comparamos con la validación cruzada 5x3 y no con la búsqueda.
+- Guardamos el mejor de cada ensemble en `results/mejores_ensembles.csv` y sus resultados por partición en `results/cv_repetida_ensembles.csv`, con las mismas particiones que los modelos base, para la evaluación en test y los tests estadísticos.

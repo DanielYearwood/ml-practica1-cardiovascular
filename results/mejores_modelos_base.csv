@@ -1,0 +1,4 @@
+modelo,imputacion,escalado,balanceo,mejores_parametros,f1_macro_media,recall_alto_media,bal_acc_media
+logistica,knn,yeojohnson,ninguno,{'C': 0.1},0.6425632954456425,0.6619482496194824,0.6413324368977764
+logistica_class_weight,knn,yeojohnson,class_weight,{'C': 1},0.6388966068184029,0.7479071537290716,0.6512361988711629
+arbol,knn,estandar,smotenc,"{'criterion': 'entropy', 'max_depth': 8, 'min_samples_leaf': 40}",0.5463115623787379,0.6120624048706241,0.5610942455542344

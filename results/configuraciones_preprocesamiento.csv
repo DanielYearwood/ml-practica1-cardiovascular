@@ -1,0 +1,13 @@
+imputacion,escalado,balanceo
+mediana,estandar,ninguno
+mediana,estandar,class_weight
+mediana,estandar,smotenc
+mediana,yeojohnson,ninguno
+mediana,yeojohnson,class_weight
+mediana,yeojohnson,smotenc
+knn,estandar,ninguno
+knn,estandar,class_weight
+knn,estandar,smotenc
+knn,yeojohnson,ninguno
+knn,yeojohnson,class_weight
+knn,yeojohnson,smotenc

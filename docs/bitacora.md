@@ -8,7 +8,7 @@ Registro de la evolución del planteamiento, las decisiones de diseño y los ava
 |------|-----------|--------|
 | 1 | Análisis exploratorio e identificación de problemáticas | Completada |
 | 2 | Preprocesamiento (mínimo 3 técnicas) | Completada |
-| 3 | Modelos base (mínimo 2) | Pendiente |
+| 3 | Modelos base (mínimo 2) | Completada |
 | 4 | Modelos de ensemble (mínimo 3) | Pendiente |
 | 5 | Validación, métricas y ajuste de hiperparámetros | En curso |
 | 6 | Conclusiones y tests estadísticos (opcional) | Pendiente |
@@ -104,3 +104,23 @@ Decisiones:
 - No usamos validación cruzada anidada ni leave-one-out porque con 12 configuraciones y varios modelos tardaría demasiado.
 
 Primeros resultados con la logística: el F1 macro está entre 0,62 y 0,64 en todas las configuraciones, pero el recall de riesgo alto pasa de 0,66 sin balancear a 0,71-0,76 con `class_weight` o SMOTE-NC. La clase moderado es la que peor se predice.
+
+### Fase 4 · Modelos base (rama `feature/5-modelos-base`)
+
+Hemos creado el notebook `04_modelos_base.ipynb` con los dos modelos base, usando el esquema de validación de `src/validacion.py` con las 12 configuraciones de preprocesamiento.
+
+Modelos:
+
+- Regresión logística. Ajustamos `C` entre 0,001 y 100 (escala logarítmica), con regularización L2.
+- Árbol de decisión. Ajustamos `max_depth` (3 a 10 o sin límite), `min_samples_leaf` (1 a 40) y `criterion` (gini o entropía). Lo elegimos en vez de KNN porque se puede interpretar y porque es la base de los ensembles.
+
+Resultados en validación cruzada:
+
+- La logística es el mejor modelo base, con F1 macro de 0,64 y casi sin sobreajuste. Con `class_weight` el F1 se mantiene y el recall de riesgo alto sube de 0,66 a 0,75.
+- El árbol se queda en 0,53-0,55 de F1 macro. Sin limitar el tamaño de las hojas llega a F1 1 en train y no mejora en validación, así que gana un árbol con hojas de 40 pacientes.
+- Las variables que más pesan en los dos modelos son parecidas (hipertensión previa, alcohol, alimentación occidental, diabetes, hemoglobina glicosilada y proteína C reactiva).
+
+Decisiones:
+
+- Para comparar con los ensembles guardamos tres candidatos: la mejor logística, la mejor logística con `class_weight` y el mejor árbol. Están en `results/mejores_modelos_base.csv` y sus resultados de la validación cruzada 5x3 en `results/cv_repetida_modelos_base.csv`.
+- No evaluamos en test todavía. Se hará al final con todos los modelos a la vez.

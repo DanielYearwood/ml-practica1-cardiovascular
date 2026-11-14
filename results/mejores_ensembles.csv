@@ -1,0 +1,4 @@
+modelo,imputacion,escalado,balanceo,mejores_parametros,f1_macro_media,recall_alto_media,bal_acc_media
+random_forest,mediana,estandar,class_weight,"{'max_depth': 10, 'max_features': 'sqrt', 'min_samples_leaf': 5}",0.6359332226232149,0.7090563165905631,0.6426230897115238
+gradient_boosting,mediana,estandar,class_weight,"{'subsample': 1.0, 'n_estimators': 400, 'min_samples_leaf': 30, 'max_depth': 3, 'learning_rate': 0.1}",0.6391490101402932,0.6897640791476408,0.6423151661636176
+xgboost,mediana,estandar,ninguno,"{'subsample': 0.7, 'reg_lambda': 1, 'n_estimators': 400, 'min_child_weight': 5, 'max_depth': 2, 'learning_rate': 0.1, 'colsample_bytree': 0.8}",0.6511805746236994,0.681468797564688,0.6506618029191537

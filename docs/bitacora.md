@@ -7,7 +7,7 @@ Registro de la evolución del planteamiento, las decisiones de diseño y los ava
 | Fase | Contenido | Estado |
 |------|-----------|--------|
 | 1 | Análisis exploratorio e identificación de problemáticas | Completada |
-| 2 | Preprocesamiento (mínimo 3 técnicas) | Pendiente |
+| 2 | Preprocesamiento (mínimo 3 técnicas) | Completada |
 | 3 | Modelos base (mínimo 2) | Pendiente |
 | 4 | Modelos de ensemble (mínimo 3) | Pendiente |
 | 5 | Validación, métricas y ajuste de hiperparámetros | Pendiente |
@@ -56,6 +56,29 @@ Decisiones que hemos tomado:
 - Las incoherencias lógicas no las corregimos porque no sabemos qué variable está mal. Solo anulamos la diastólica >= sistólica y los años fumando > edad - 10. Pensamos que el dataset es sintético y lo comentaremos en la memoria.
 - No eliminamos filas, porque con los valores imposibles como nulos se perdería el 34,3 % de los pacientes. Habrá que imputar.
 
-Siguiente paso: preprocesamiento (issue #4).
-
 Las figuras y tablas están en `results/`.
+
+### Fase 2 · Preprocesamiento (rama `feature/4-preprocesamiento`)
+
+Hemos creado `src/preprocesamiento.py` con todo el preprocesamiento dentro de un `Pipeline` de imbalanced-learn, y el notebook `02_preprocesamiento.ipynb` donde explicamos y comprobamos cada técnica.
+
+Técnicas aplicadas:
+
+- T1. Valores imposibles a NaN (con las reglas clínicas) e imputación. Comparamos mediana y KNN (5 vecinos). No añadimos indicador de nulos porque en el EDA vimos que no dependen de la clase.
+- T2. Escalado. Comparamos z-score y Yeo-Johnson. Con Yeo-Johnson la asimetría de PCR, triglicéridos, colesterol total, sistólica y ácido úrico baja de 1,3-1,6 a casi 0.
+- T3. Balanceo. Comparamos no hacer nada, `class_weight="balanced"` y SMOTE-NC. Usamos SMOTE-NC y no SMOTE porque hay binarias y categóricas. Para los modelos sin `class_weight` (GradientBoosting, XGBoost) hay que pasar `sample_weight` con la función `pesos_balanceados`.
+- T4. Codificación. Ordinal para `nivel_actividad` y one-hot para `tipo_alimentacion` y `antecedentes_familiares_tipo`.
+
+Decisiones:
+
+- En el pipeline primero se escala y luego se imputa, para que KNN calcule las distancias con todas las variables en la misma escala.
+- SMOTE-NC va antes de codificar las categóricas, para que las trate como categorías.
+- Al estar todo dentro del pipeline, SMOTE solo se aplica al train de cada fold en la validación cruzada y la validación se hace con pacientes reales.
+- Salen 12 combinaciones de preprocesamiento (2 imputaciones x 2 escalados x 3 balanceos). Hemos comprobado que todas funcionan con una regresión logística; la comparación con todos los modelos va en el notebook 03.
+
+Cómo usarlo para entrenar un modelo:
+
+```python
+from src.preprocesamiento import construir_pipeline, todas_las_configuraciones
+pipe = construir_pipeline(modelo, imputacion="knn", escalado="yeojohnson", balanceo="smotenc")
+```

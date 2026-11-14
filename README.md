@@ -37,12 +37,14 @@ ml-practica1-cardiovascular/
 │   └── bitacora.md       # Evolución del proyecto y decisiones de diseño
 ├── notebooks/
 │   ├── 01_analisis_exploratorio.ipynb
-│   └── 02_preprocesamiento.ipynb
+│   ├── 02_preprocesamiento.ipynb
+│   └── 03_validacion.ipynb
 ├── results/              # Figuras y tablas generadas
 ├── src/
 │   ├── config.py         # Rutas, semilla y parámetros comunes
 │   ├── reglas_clinicas.py # Rangos clínicos para detectar valores imposibles
-│   └── preprocesamiento.py # Pipeline de preprocesamiento (imputación, escalado, balanceo y codificación)
+│   ├── preprocesamiento.py # Pipeline de preprocesamiento (imputación, escalado, balanceo y codificación)
+│   └── validacion.py     # Partición, validación cruzada, ajuste de hiperparámetros y métricas
 ├── requirements.txt
 └── README.md
 ```

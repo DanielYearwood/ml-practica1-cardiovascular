@@ -1,0 +1,12 @@
+,n_pacientes,porcentaje
+Diastólica >= sistólica,44,1.95
+HDL + LDL > colesterol total,559,24.8
+No fumador con años de fumador > 0,1279,56.74
+No fumador con años de fumador > 10,533,23.65
+Fumador actual con 0 años de fumador,123,5.46
+Años de fumador > edad - 10,18,0.8
+"No diabético con glucosa >= 126 o HbA1c >= 6,5",597,26.49
+"Diabético con glucosa < 100 y HbA1c < 5,7",98,4.35
+Antihipertensivos sin hipertensión previa,478,21.21
+Sedentario con >= 5 días de ejercicio,90,3.99
+Muy activo con 0 días de ejercicio,28,1.24

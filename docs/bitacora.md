@@ -10,7 +10,7 @@ Registro de la evolución del planteamiento, las decisiones de diseño y los ava
 | 2 | Preprocesamiento (mínimo 3 técnicas) | Completada |
 | 3 | Modelos base (mínimo 2) | Pendiente |
 | 4 | Modelos de ensemble (mínimo 3) | Pendiente |
-| 5 | Validación, métricas y ajuste de hiperparámetros | Pendiente |
+| 5 | Validación, métricas y ajuste de hiperparámetros | En curso |
 | 6 | Conclusiones y tests estadísticos (opcional) | Pendiente |
 | 7 | Memoria, vídeo e informe de uso ético | Pendiente |
 
@@ -82,3 +82,25 @@ Cómo usarlo para entrenar un modelo:
 from src.preprocesamiento import construir_pipeline, todas_las_configuraciones
 pipe = construir_pipeline(modelo, imputacion="knn", escalado="yeojohnson", balanceo="smotenc")
 ```
+
+### Fase 3 · Validación y ajuste de hiperparámetros (rama `feature/7-validacion`)
+
+Hemos creado `src/validacion.py` con el esquema de validación que van a usar todos los modelos, y el notebook `03_validacion.ipynb` donde lo explicamos y lo probamos con una regresión logística.
+
+Esquema:
+
+- Partición train/test 80/20 estratificada con la semilla de `config.py`. El test no se usa hasta el final.
+- Con el train, `GridSearchCV` (o `RandomizedSearchCV` en los modelos lentos) con `StratifiedKFold` de 5 particiones, para cada una de las 12 configuraciones de preprocesamiento.
+- Para comparar los mejores modelos, validación cruzada 5x3 con las mismas particiones para todos. Esto nos sirve también para los tests estadísticos.
+- Al final, cada modelo elegido se entrena con todo el train y se evalúa en test.
+
+Métricas: F1 macro, balanced accuracy, recall de riesgo alto y accuracy. Los hiperparámetros se eligen por F1 macro.
+
+Decisiones:
+
+- La métrica más importante desde el punto de vista clínico es el recall de riesgo alto, porque no detectar a un paciente de riesgo alto es el error más grave. No la usamos para elegir hiperparámetros porque un modelo que diga "alto" a todo el mundo tendría recall 1. Elegimos con F1 macro y miramos el recall de riesgo alto al comparar.
+- Como todo el preprocesamiento está en el pipeline, en cada fold SMOTE-NC solo se aplica al train y la validación se hace con pacientes reales. Lo hemos comprobado en el notebook. Es lo mismo que aclaró la profesora en el anuncio del 13/11.
+- Para los modelos sin `class_weight` (GradientBoosting, XGBoost) la configuración `class_weight` se hace con pesos por muestra.
+- No usamos validación cruzada anidada ni leave-one-out porque con 12 configuraciones y varios modelos tardaría demasiado.
+
+Primeros resultados con la logística: el F1 macro está entre 0,62 y 0,64 en todas las configuraciones, pero el recall de riesgo alto pasa de 0,66 sin balancear a 0,71-0,76 con `class_weight` o SMOTE-NC. La clase moderado es la que peor se predice.

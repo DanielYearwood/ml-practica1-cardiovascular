@@ -10,7 +10,7 @@ Registro de la evolución del planteamiento, las decisiones de diseño y los ava
 | 2 | Preprocesamiento (mínimo 3 técnicas) | Completada |
 | 3 | Modelos base (mínimo 2) | Completada |
 | 4 | Modelos de ensemble (mínimo 3) | Completada |
-| 5 | Validación, métricas y ajuste de hiperparámetros | En curso |
+| 5 | Validación, métricas y ajuste de hiperparámetros | Completada |
 | 6 | Conclusiones y tests estadísticos (opcional) | Pendiente |
 | 7 | Memoria, vídeo e informe de uso ético | Pendiente |
 
@@ -149,3 +149,22 @@ Decisiones:
 - Random Forest necesita `class_weight`: sin balancear tiene el peor recall de riesgo alto de todos los modelos (0,56). En XGBoost gana no balancear, pero con pesos sube el recall de riesgo alto.
 - Gradient Boosting deja de mejorar en validación hacia los 150 árboles. Es sensible a cambios pequeños, por eso comparamos con la validación cruzada 5x3 y no con la búsqueda.
 - Guardamos el mejor de cada ensemble en `results/mejores_ensembles.csv` y sus resultados por partición en `results/cv_repetida_ensembles.csv`, con las mismas particiones que los modelos base, para la evaluación en test y los tests estadísticos.
+
+### Fase 6 · Evaluación en test (rama `feature/8-evaluacion`)
+
+Hemos creado el notebook `06_evaluacion.ipynb`, donde entrenamos los seis modelos finales con todo el train y los evaluamos una sola vez en el test (451 pacientes).
+
+Métricas: F1 macro, balanced accuracy, recall de riesgo alto, accuracy y AUC macro. Además contamos los pacientes de riesgo alto clasificados como riesgo bajo, que es el error más grave.
+
+Resultados en test:
+
+- XGBoost tiene el mejor F1 macro (0,715) y AUC (0,869), con la logística muy cerca (0,697).
+- La logística con `class_weight` tiene el mejor recall de riesgo alto (0,778) y solo clasifica a 2 pacientes de riesgo alto como bajo.
+- El árbol es el peor en todo (F1 macro 0,530 y 12 pacientes de riesgo alto como bajo).
+- En todos los modelos la clase moderado es la más difícil. Casi todos los errores con los de riesgo alto son confundirlos con moderado.
+
+Decisiones:
+
+- La métrica más importante desde el punto de vista clínico es el recall de riesgo alto, porque no detectar a un paciente de riesgo alto es mucho más grave que una falsa alarma. No la usamos sola porque un modelo que diga "alto" a todos tendría recall 1; elegimos con F1 macro y usamos el recall de riesgo alto para decidir entre modelos parecidos.
+- Calculamos intervalos de confianza del 95 % con bootstrap sobre el test. Salen de unas ±0,045 en F1 macro, así que con el test no se puede separar a los tres mejores modelos. La comparación estadística la hacemos con las particiones de la validación cruzada.
+- Los resultados del test cuadran con los de la validación cruzada (mismo orden y ningún modelo empeora), así que no hemos sobreajustado al elegir hiperparámetros.

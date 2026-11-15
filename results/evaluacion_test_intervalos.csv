@@ -1,0 +1,7 @@
+modelo,f1_macro,recall_alto,f1_macro_inf,f1_macro_sup,recall_alto_inf,recall_alto_sup
+xgboost,0.715,0.722,0.67,0.755,0.632,0.814
+logistica,0.697,0.7,0.652,0.742,0.605,0.796
+logistica_class_weight,0.674,0.778,0.627,0.716,0.687,0.856
+gradient_boosting,0.656,0.722,0.607,0.697,0.629,0.815
+random_forest,0.644,0.689,0.594,0.69,0.585,0.784
+arbol,0.53,0.622,0.483,0.576,0.523,0.718

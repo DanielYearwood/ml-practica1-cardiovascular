@@ -11,7 +11,7 @@ Registro de la evolución del planteamiento, las decisiones de diseño y los ava
 | 3 | Modelos base (mínimo 2) | Completada |
 | 4 | Modelos de ensemble (mínimo 3) | Completada |
 | 5 | Validación, métricas y ajuste de hiperparámetros | Completada |
-| 6 | Conclusiones y tests estadísticos (opcional) | Pendiente |
+| 6 | Conclusiones y tests estadísticos (opcional) | Completada |
 | 7 | Memoria, vídeo e informe de uso ético | Pendiente |
 
 ## Registro
@@ -168,3 +168,27 @@ Decisiones:
 - La métrica más importante desde el punto de vista clínico es el recall de riesgo alto, porque no detectar a un paciente de riesgo alto es mucho más grave que una falsa alarma. No la usamos sola porque un modelo que diga "alto" a todos tendría recall 1; elegimos con F1 macro y usamos el recall de riesgo alto para decidir entre modelos parecidos.
 - Calculamos intervalos de confianza del 95 % con bootstrap sobre el test. Salen de unas ±0,045 en F1 macro, así que con el test no se puede separar a los tres mejores modelos. La comparación estadística la hacemos con las particiones de la validación cruzada.
 - Los resultados del test cuadran con los de la validación cruzada (mismo orden y ningún modelo empeora), así que no hemos sobreajustado al elegir hiperparámetros.
+
+### Fase 7 · Comparación de modelos y conclusiones (rama `feature/9-comparacion`)
+
+Hemos creado el notebook `07_comparacion.ipynb`, donde comparamos los seis modelos por rendimiento, complejidad, interpretabilidad y robustez, y hacemos los tests estadísticos.
+
+Tests estadísticos (con el F1 macro y el recall de riesgo alto de las 15 particiones de la validación cruzada 5x3):
+
+- Test de Friedman: sale significativo en las dos métricas, así que no todos los modelos son iguales.
+- Test de Nemenyi (CD = 1,95): en F1 macro solo el árbol es significativamente peor. En recall de riesgo alto la logística con `class_weight` es significativamente mejor que todos menos Random Forest.
+- Wilcoxon por parejas con corrección de Holm: XGBoost no es significativamente mejor que las dos logísticas en F1 macro, y la logística con `class_weight` es significativamente mejor que todos en recall de riesgo alto.
+
+Modelo elegido: la regresión logística con `class_weight` (imputación KNN, Yeo-Johnson y `C=1`).
+
+- Su F1 macro es estadísticamente igual al del mejor modelo (XGBoost) y tiene el mejor recall de riesgo alto: en test detecta 70 de los 90 pacientes de riesgo alto y solo clasifica a 2 como bajo.
+- Es el modelo más simple (102 parámetros) y el más rápido, y sus coeficientes se pueden explicar a un médico.
+- Depende poco del preprocesamiento y no empeora en test.
+- A cambio da más falsas alarmas que XGBoost, que nos parece aceptable en un cribado.
+
+Decisiones:
+
+- Para comparar todos los modelos a la vez usamos Friedman y después Nemenyi. Como Nemenyi es conservador, añadimos Wilcoxon por parejas con Holm.
+- Las particiones de la validación cruzada repetida comparten pacientes, así que los p-valores salen algo optimistas. Solo damos por buenas las diferencias que salen con margen.
+- XGBoost queda como alternativa si solo importara el F1 macro, pero no es significativamente mejor y es mucho menos interpretable.
+- Posibles mejoras: ajustar el umbral de decisión de la clase alto, probar un modelo ordinal, calibrar las probabilidades y usar SHAP para explicar los ensembles.

@@ -41,7 +41,8 @@ ml-practica1-cardiovascular/
 │   ├── 03_validacion.ipynb
 │   ├── 04_modelos_base.ipynb
 │   ├── 05_ensembles.ipynb
-│   └── 06_evaluacion.ipynb
+│   ├── 06_evaluacion.ipynb
+│   └── 07_comparacion.ipynb
 ├── results/              # Figuras y tablas generadas
 ├── src/
 │   ├── config.py         # Rutas, semilla y parámetros comunes

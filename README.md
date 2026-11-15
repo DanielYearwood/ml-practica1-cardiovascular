@@ -34,7 +34,9 @@ A partir de una cohorte clínica de 2.254 pacientes adultos con 27 variables soc
 ml-practica1-cardiovascular/
 ├── data/                 # Dataset (enfermedad_cardiovascular.csv)
 ├── docs/
-│   └── bitacora.md       # Evolución del proyecto y decisiones de diseño
+│   ├── bitacora.md               # Evolución del proyecto y decisiones de diseño
+│   ├── Memoria_P1.pdf            # Memoria técnica
+│   └── Informe uso de IA.pdf     # Informe de uso ético de la IA
 ├── notebooks/
 │   ├── 01_analisis_exploratorio.ipynb
 │   ├── 02_preprocesamiento.ipynb

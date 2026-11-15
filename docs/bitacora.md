@@ -12,7 +12,7 @@ Registro de la evolución del planteamiento, las decisiones de diseño y los ava
 | 4 | Modelos de ensemble (mínimo 3) | Completada |
 | 5 | Validación, métricas y ajuste de hiperparámetros | Completada |
 | 6 | Conclusiones y tests estadísticos (opcional) | Completada |
-| 7 | Memoria, vídeo e informe de uso ético | Pendiente |
+| 7 | Memoria, vídeo e informe de uso ético | En curso |
 
 ## Registro
 
@@ -192,3 +192,9 @@ Decisiones:
 - Las particiones de la validación cruzada repetida comparten pacientes, así que los p-valores salen algo optimistas. Solo damos por buenas las diferencias que salen con margen.
 - XGBoost queda como alternativa si solo importara el F1 macro, pero no es significativamente mejor y es mucho menos interpretable.
 - Posibles mejoras: ajustar el umbral de decisión de la clase alto, probar un modelo ordinal, calibrar las probabilidades y usar SHAP para explicar los ensembles.
+
+### Documentación final
+
+Hemos terminado la memoria técnica (9 páginas, con la plantilla IEEE de la asignatura) y el informe de uso ético de la IA, y los hemos añadido en `docs/`.
+
+Queda el vídeo, que se entrega el 18/11.
